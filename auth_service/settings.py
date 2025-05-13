@@ -12,7 +12,26 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 from django.core.management.utils import get_random_secret_key
+# DB confi read form DATABASE_URL
+import dj_database_url
+
+load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# 读取环境变量
+SECRET_KEY = os.getenv("SECRET_KEY", "your-default-secret-key")
+DEBUG = os.getenv("DEBUG", "False") == "True"
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
+
+# 数据库配置（支持 Render 自动提供的 DATABASE_URL）
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL")
+    )
+}
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -70,8 +89,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'auth_service.wsgi.application'
 
-# DB confi read form DATABASE_URL
-import dj_database_url
 
 DATABASES = {
     'default': dj_database_url.config(default='postgres://postgres:36600@localhost:5432/auth_db')
