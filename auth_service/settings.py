@@ -21,12 +21,12 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 读取环境变量
+# read .env
 SECRET_KEY = os.getenv("SECRET_KEY", "your-default-secret-key")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 
-# 数据库配置（支持 Render 自动提供的 DATABASE_URL）
+# Link database with url from Renderdatabase
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv("DATABASE_URL")
