@@ -24,14 +24,46 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            data = {
+                "username": user.username,
+                "email": user.email,
+                "phone": getattr(user, 'phone', None),
+            }
+            return Response({
+                "message": "User registered successfully",
+                "data": data
+            }, status=201)
+        return Response({
+            "message": "Registration failed",
+            "errors": serializer.errors
+        }, status=400)
+
+from django.contrib.auth import authenticate
+from .models import CustomUser
+
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        try:
+            user = CustomUser.objects.get(email=email)
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "Invalid email or password"}, status=400)
+
+        user = authenticate(username=user.username, password=password)
+
+        if not user:
+            return Response({"detail": "Invalid email or password"}, status=400)
+
         token, created = Token.objects.get_or_create(user=user)
         return Response({
-            'token': token.key,
-            'user_id': user.pk,
-            'email': user.email
+            "token": token.key,
+            "user_id": user.pk,
+            "username": user.username,
+            "email": user.email
         })
