@@ -72,8 +72,8 @@ class CustomAuthToken(ObtainAuthToken):
 
         token, created = Token.objects.get_or_create(user=user)
         return Response({
-            "message": "Login successful",
-            "data": {
+             "message": "Login successful",
+             "data": {
                 "token": token.key,
                 "user_id": user.pk,
                 "username": user.username,
