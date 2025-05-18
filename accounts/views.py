@@ -11,7 +11,7 @@ from rest_framework.response import Response
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def validate_permission(request):
-    # 解析请求中的权限参数（如所需权限或角色）
+    # Analyse permission
     required_permission = request.data.get('permission')
     user = request.user
     if user.has_perm(required_permission):
@@ -53,12 +53,22 @@ class CustomAuthToken(ObtainAuthToken):
         try:
             user = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
-            return Response({"detail": "Invalid email or password"}, status=400)
+            return Response({
+                "message": "Login failed",
+                "errors": {
+                    "detail": "Invalid email or password"
+                }
+            }, status=400)
 
         user = authenticate(username=user.username, password=password)
 
         if not user:
-            return Response({"detail": "Invalid email or password"}, status=400)
+            return Response({
+                "message": "Login failed",
+                "errors": {
+                    "detail": "Invalid email or password"
+                }
+            }, status=400)
 
         token, created = Token.objects.get_or_create(user=user)
         return Response({
