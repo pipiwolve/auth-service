@@ -5,7 +5,7 @@ A lightweight authentication API built with Django and Django REST Framework. It
 ## Live API
 
 Base URL:  
-https://auth-service-2gbd.onrender.com
+https://auth-service-r1lp.onrender.com/
 
 ## Features
 
