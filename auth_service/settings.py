@@ -17,14 +17,19 @@ from django.core.management.utils import get_random_secret_key
 # DB confi read form DATABASE_URL
 import dj_database_url
 
-load_dotenv()
+# load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+# change .env file for testing 
+ENV_FILE = os.getenv("ENV_FILE", ".env") 
+load_dotenv(dotenv_path=BASE_DIR / ENV_FILE)
+
 
 # read .env
 SECRET_KEY = os.getenv("SECRET_KEY", "your-default-secret-key")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
+print("Loaded ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
 # Link database with url from Renderdatabase
 DATABASES = {
@@ -89,10 +94,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'auth_service.wsgi.application'
 
-
-DATABASES = {
-    'default': dj_database_url.config(default='postgres://postgres:36600@localhost:5432/auth_db')
-}
 
 # 认证设置
 REST_FRAMEWORK = {

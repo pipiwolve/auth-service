@@ -6,7 +6,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
+from rest_framework.permissions import IsAdminUser
+from rest_framework import status
+from django.shortcuts import get_object_or_404
 
 @api_view(['GET', 'HEAD'])
 @permission_classes([AllowAny])
@@ -85,3 +87,18 @@ class CustomAuthToken(ObtainAuthToken):
                 "email": user.email
             }
         })
+
+
+# Admin-only views
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def list_users(request):
+    users = CustomUser.objects.all().values('id', 'username', 'email', 'phone')
+    return Response({"users": list(users)})
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_user(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    user.delete()
+    return Response({"message": f"User with ID {user_id} has been deleted."}, status=status.HTTP_204_NO_CONTENT)
