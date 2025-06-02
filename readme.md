@@ -105,6 +105,44 @@ Response (unauthorized):
 }
 ```
 
+### **4. List Users**
+
+GET `/auth/users/`
+
+Headers:
+```
+Authorization: Token <your-token>
+```
+
+Response:
+```json
+[
+  {
+    "id": 1,
+    "username": "taha",
+    "email": "taha@hsrw.com",
+    "phone": "1234567890"
+  },
+  ...
+]
+```
+
+### **5. Delete User**
+
+DELETE `/auth/users/<user_id>/`
+
+Headers:
+```
+Authorization: Token <your-token>
+```
+
+Response:
+```json
+{
+  "message": "User with ID <user_id> has been deleted."
+}
+```
+
 ## **Quick Start (with Docker)**
 
 1. Clone the repository

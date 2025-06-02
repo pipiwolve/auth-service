@@ -1,7 +1,3 @@
-
-
-
-
 # **Django Auth API — Usage Guide**
 
 
@@ -11,7 +7,7 @@
 **Base URL**
 
 ```
-https://auth-service-2gbd.onrender.com
+https://auth-service-r1lp.onrender.com
 ```
 
 
@@ -171,6 +167,16 @@ https://auth-service-2gbd.onrender.com
 
   Authorization: Token your_token_here
 
+- **Permission Type**
+
+accounts.view_customuser
+
+accounts.add_customuser
+
+accounts.change_customuser
+
+accounts.delete_customuser
+
 - **Request Body**:
 
 
@@ -207,5 +213,66 @@ https://auth-service-2gbd.onrender.com
 
 
 
+---
 
+## **📋 4. List Users**
 
+- **URL**: /auth/users/
+
+- **Method**: GET
+
+- **Headers**:
+  
+  Content-Type: application/json  
+  Authorization: Token your_token_here
+
+- **Success Response**:
+
+```
+[
+  {
+    "id": 1,
+    "username": "jaden",
+    "email": "jaden@example.com",
+    "phone": "1234567890"
+  },
+  ...
+]
+```
+
+- **Error Response**:
+
+```
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+
+---
+
+## **🗑 5. Delete User**
+
+- **URL**: /auth/users/<user_id>/
+
+- **Method**: DELETE
+
+- **Headers**:
+  
+  Content-Type: application/json  
+  Authorization: Token your_token_here (must be an admin)
+
+- **Success Response**:
+
+```
+{
+  "message": "User with ID <user_id> has been deleted."
+}
+```
+
+- **Error Response**:
+
+```
+{
+  "detail": "You do not have permission to perform this action."
+}
+```
